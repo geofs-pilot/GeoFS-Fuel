@@ -27,7 +27,7 @@ function runFuelSystem() {
 
         fuelBarContainer.appendChild(fuelBar);
         document.body.appendChild(fuelBarContainer);
-        return fuelBar;
+        return { fuelBar, fuelBarContainer };
     }
 
     function createRefuelButton(fuelState) {
@@ -58,8 +58,9 @@ function runFuelSystem() {
         return { fuel: initialFuel, initialFuel };
     }
 
+    let fuelUpdateInterval;
     function updateFuelSystem(fuelState, fuelBar, refuelButton) {
-        setInterval(() => {
+        fuelUpdateInterval = setInterval(() => {
             if (geofs.pause) return;
             const engineParts = Object.keys(geofs.aircraft.instance.parts).filter(key => key.toLowerCase().includes('engine'));
             const maxThrust = engineParts.reduce((sum, key) => sum + (geofs.aircraft.instance.parts[key].thrust || 0), 0);
@@ -111,16 +112,16 @@ function runFuelSystem() {
             console.log("Engine restart prevented as fuel is depleted.");
         }
     });
-    const fuelBar = createFuelBar();
+    const { fuelBar, fuelBarContainer } = createFuelBar();
     const refuelButton = createRefuelButton(fuelState);
     updateFuelSystem(fuelState, fuelBar, refuelButton);
     let lastAircraftId = geofs.aircraft.instance.aircraftRecord.id;
     setInterval(() => {
         if (geofs.aircraft.instance.aircraftRecord.id !== lastAircraftId) {
-            fuelBar.style.display = "none";
-            refuelButton.style.display = "none";
-            fuelState.fuel = fuelState.initialFuel;
+            fuelBarContainer.remove();
+            refuelButton.remove();
             lastAircraftId = geofs.aircraft.instance.aircraftRecord.id;
+            clearInterval(fuelUpdateInterval);
             runFuelSystem();
         }
     }, 1000);
