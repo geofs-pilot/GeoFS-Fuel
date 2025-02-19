@@ -1,6 +1,8 @@
 //GeoFS Fuel: Attempts to simulate fuel consumption somewhat realistically
 //Calculates fuel capacity based on aircraft mass
 //Calculates burn rates based on RPM
+//Accounts for afterburner use
+//Shuts off engines when fuel depleted
 //Must be on the ground, groundspeed 0, and engines off to refuel
 //Fine-tune endurance and burnrates on lines 49 and 72 - the higher the values, the longer the endurance (for line 72, change both of the 140's)
 
