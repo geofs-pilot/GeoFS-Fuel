@@ -119,6 +119,7 @@ function runFuelSystem() {
         if (geofs.aircraft.instance.aircraftRecord.id !== lastAircraftId) {
             fuelBar.style.display = "none";
             refuelButton.style.display = "none";
+            fuelState.fuel = fuelState.initialFuel;
             lastAircraftId = geofs.aircraft.instance.aircraftRecord.id;
             runFuelSystem();
         }
