@@ -5,7 +5,7 @@
 //Accounts for afterburner use
 //Shuts off engines when fuel depleted
 //Must be on the ground, groundspeed 0, and engines off to refuel
-//Fine-tune endurance and burnrates on lines 49 and 72 - the higher the values, the longer the endurance (for line 72, change both of the 140's)
+//Fine-tune endurance and burnrates on lines 58 and 82 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
 
 function runFuelSystem() {
     function createFuelBar() {
