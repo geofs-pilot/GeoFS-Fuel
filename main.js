@@ -47,7 +47,7 @@ function runFuelSystem() {
 
         refuelButton.addEventListener("click", () => {
             fuelState.fuel = fuelState.initialFuel;
-            geofs.aircraft.instance.engine.on = false;
+            //geofs.aircraft.instance.engine.on = false;
             console.log("Plane refueled.");
         });
         return refuelButton;
