@@ -47,7 +47,6 @@ function runFuelSystem() {
 
         refuelButton.addEventListener("click", () => {
             fuelState.fuel = fuelState.initialFuel;
-            //geofs.aircraft.instance.engine.on = false;
             console.log("Plane refueled.");
         });
         return refuelButton;
@@ -81,7 +80,10 @@ function runFuelSystem() {
             const throttle = maxThrust > 0 ? currentThrust / maxThrust : 0;
             const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 140 : maxThrust / 140;
             const fullThrottleBurnRate = idleBurnRate * 3;
-            const fuelBurnRate = geofs.aircraft.instance.engine.rpm > 0 ? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
+            let fuelBurnRate = geofs.aircraft.instance.engine.rpm > 0 ? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
+            const engineOn = geofs.aircraft.instance.engine.on;
+            if (engineOn === false)
+                fuelBurnRate = 0
             const timeElapsed = 1 / 3600;
             fuelState.fuel -= fuelBurnRate * timeElapsed;
             if (fuelState.fuel < 0) fuelState.fuel = 0;
@@ -97,7 +99,6 @@ function runFuelSystem() {
 
             const groundSpeed = geofs.aircraft.instance.groundSpeed;
             const groundContact = geofs.aircraft.instance.groundContact;
-            const engineOn = geofs.aircraft.instance.engine.on;
             refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
             console.log(`Fuel Burn Rate per Hour: ${fuelBurnRate.toFixed(6)}`);
             console.log(`Fuel Burned This Second: ${(fuelBurnRate / 3600).toFixed(6)}`);
