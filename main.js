@@ -5,7 +5,7 @@
 //Accounts for afterburner use
 //Shuts off engines when fuel depleted
 //Must be on the ground, groundspeed 0, and engines off to refuel
-//Fine-tune endurance and burnrates on lines 58 and 82 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
+//Fine-tune endurance and burnrates on lines 57 and 71 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
 
 function runFuelSystem() {
     function createFuelBar() {
@@ -46,7 +46,6 @@ function runFuelSystem() {
         document.body.appendChild(refuelButton);
 
         refuelButton.addEventListener("click", () => {
-            controls.throttle = 0
             fuelState.fuel = fuelState.initialFuel;
             console.log("Plane refueled.");
         });
@@ -63,28 +62,15 @@ function runFuelSystem() {
     function updateFuelSystem(fuelState, fuelBar, refuelButton) {
         fuelUpdateInterval = setInterval(() => {
             if (geofs.pause) return;
-            const engineParts = Object.keys(geofs.aircraft.instance.parts).filter(key => key.toLowerCase().includes('engine'));
-            const maxThrust = engineParts.reduce((sum, key) => sum + (geofs.aircraft.instance.parts[key].thrust || 0), 0);
-            let totalAfterBurnerThrust = 0;
-            let hasAfterburners = false;
-
-            engineParts.forEach(key => {
-                const part = geofs.aircraft.instance.parts[key];
-                if (part?.afterBurnerThrust !== undefined) {
-                    totalAfterBurnerThrust += part.afterBurnerThrust;
-                    hasAfterburners = true;
-                }
-            });
-
-            const usingAfterburners = hasAfterburners && geofs.aircraft.instance.engine.rpm > 9000;
-            const currentThrust = usingAfterburners ? totalAfterBurnerThrust : geofs.animation.values.smoothThrottle * maxThrust;
-            const throttle = maxThrust > 0 ? currentThrust / maxThrust : 0;
+            const maxThrust = geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.thrust || 0), 0);
+            const hasAfterburners = geofs.aircraft.instance.engines[0]?.afterBurnerThrust !== undefined;
+            const usingAfterburners = hasAfterburners && Math.abs(geofs.animation.values.smoothThrottle) > 0.9;
+            const totalAfterBurnerThrust = hasAfterburners ? geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.afterBurnerThrust || 0), 0) : 0;
+            const currentThrust = usingAfterburners ? totalAfterBurnerThrust : Math.abs(geofs.animation.values.smoothThrottle) * maxThrust;
+            const throttle = currentThrust / maxThrust;
             const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 140 : maxThrust / 140;
             const fullThrottleBurnRate = idleBurnRate * 3;
-            let fuelBurnRate = geofs.aircraft.instance.engine.rpm > 0 ? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
-            const engineOn = geofs.aircraft.instance.engine.on;
-            if (engineOn === false)
-                fuelBurnRate = 0
+            const fuelBurnRate = geofs.aircraft.instance.engine.on? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
             const timeElapsed = 1 / 3600;
             fuelState.fuel -= fuelBurnRate * timeElapsed;
             if (fuelState.fuel < 0) fuelState.fuel = 0;
@@ -94,12 +80,18 @@ function runFuelSystem() {
             fuelBar.style.backgroundColor = fuelPercentage > 50 ? "green" : fuelPercentage > 25 ? "orange" : "red";
 
             if (fuelState.fuel === 0) {
-                geofs.aircraft.instance.engine.on = false;
+                setInterval(() => {
+                    if (fuelState.fuel === 0) {
+                        controls.throttle = 0
+                        geofs.aircraft.instance.stopEngine();
+                    }
+                }, 10);
                 console.log("Fuel depleted! Engines have been turned off.");
             }
 
             const groundSpeed = geofs.aircraft.instance.groundSpeed;
             const groundContact = geofs.aircraft.instance.groundContact;
+            const engineOn = geofs.aircraft.instance.engine.on;
             refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
             console.log(`Fuel Burn Rate per Hour: ${fuelBurnRate.toFixed(6)}`);
             console.log(`Fuel Burned This Second: ${(fuelBurnRate / 3600).toFixed(6)}`);
@@ -108,13 +100,6 @@ function runFuelSystem() {
     }
 
     const fuelState = initializeFuelSystem();
-    document.addEventListener("keydown", (event) => {
-        if (fuelState.fuel === 0 && event.key.toLowerCase() === "e") {
-            event.preventDefault();
-            geofs.aircraft.instance.engine.on = false;
-            console.log("Engine restart prevented as fuel is depleted.");
-        }
-    });
     const { fuelBar, fuelBarContainer } = createFuelBar();
     const refuelButton = createRefuelButton(fuelState);
     updateFuelSystem(fuelState, fuelBar, refuelButton);
