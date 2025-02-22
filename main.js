@@ -46,6 +46,7 @@ function runFuelSystem() {
         document.body.appendChild(refuelButton);
 
         refuelButton.addEventListener("click", () => {
+            controls.throttle = 0
             fuelState.fuel = fuelState.initialFuel;
             console.log("Plane refueled.");
         });
