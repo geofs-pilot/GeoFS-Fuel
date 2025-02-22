@@ -77,7 +77,7 @@ function runFuelSystem() {
             });
 
             const usingAfterburners = hasAfterburners && geofs.aircraft.instance.engine.rpm > 9000;
-            const currentThrust = usingAfterburners ? totalAfterBurnerThrust : (geofs.aircraft.instance.engine.rpm / 10000) * maxThrust;
+            const currentThrust = usingAfterburners ? totalAfterBurnerThrust : geofs.animation.values.smoothThrottle * maxThrust;
             const throttle = maxThrust > 0 ? currentThrust / maxThrust : 0;
             const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 140 : maxThrust / 140;
             const fullThrottleBurnRate = idleBurnRate * 3;
