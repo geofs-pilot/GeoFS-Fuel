@@ -27,7 +27,7 @@ function runFuelSystem() {
         fuelBar.style.borderRadius = "5px";
 
         fuelBarContainer.appendChild(fuelBar);
-        document.body.appendChild(fuelBarContainer);
+        document.querySelector(".geofs-ui-bottom").appendChild(fuelBarContainer);
         return { fuelBar, fuelBarContainer };
     }
 
@@ -43,8 +43,8 @@ function runFuelSystem() {
         refuelButton.style.border = "1px solid black";
         refuelButton.style.borderRadius = "5px";
         refuelButton.style.zIndex = "1000";
-        document.body.appendChild(refuelButton);
-
+        document.querySelector(".geofs-ui-bottom").appendChild(refuelButton);
+        
         refuelButton.addEventListener("click", () => {
             fuelState.fuel = fuelState.initialFuel;
             console.log("Plane refueled.");
