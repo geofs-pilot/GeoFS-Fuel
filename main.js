@@ -12,7 +12,7 @@ function runFuelSystem() {
         const fuelBarContainer = document.createElement("div");
         fuelBarContainer.style.position = "absolute";
         fuelBarContainer.style.bottom = "8px";
-        fuelBarContainer.style.right = "50px";
+        fuelBarContainer.style.right = "170px";
         fuelBarContainer.style.width = "100px";
         fuelBarContainer.style.height = "17px";
         fuelBarContainer.style.border = "1px solid black";
@@ -36,7 +36,7 @@ function runFuelSystem() {
         refuelButton.textContent = "Refuel";
         refuelButton.style.position = "absolute";
         refuelButton.style.bottom = "5px";
-        refuelButton.style.right = "160px";
+        refuelButton.style.right = "280px";
         refuelButton.style.padding = "4px 20px";
         refuelButton.style.fontSize = "14px";
         refuelButton.style.backgroundColor = "yellow";
