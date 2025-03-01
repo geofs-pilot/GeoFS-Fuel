@@ -77,7 +77,7 @@ function runFuelSystem() {
 
             const fuelPercentage = (fuelState.fuel / fuelState.initialFuel) * 100;
             fuelBar.style.width = `${fuelPercentage}%`;
-            fuelBar.style.backgroundColor = fuelPercentage > 50 ? "green" : fuelPercentage > 25 ? "orange" : "red";
+            fuelBar.style.backgroundColor = fuelPercentage > 15 ? "green" : fuelPercentage > 7 ? "orange" : "red";
 
             if (fuelState.fuel === 0) {
                 setInterval(() => {
