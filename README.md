@@ -5,13 +5,11 @@ This is an experimental addon for GeoFS that attempts to simulate fuel consumpti
 find geofs.aircraft.instance.engines.thrust (or afterburnerThrust if you plan on crusing with afterburner) <br/>
 then divide by 140<br/>
 thats your idle rate, multiply by 3 to get full throttle burn rate per hour<br/>
-then multiply the full rate by the amount of engines<br/>
+then multiply the full throttle rate by the number of engines<br/>
 thats your total burnrate per hour, at full throttle<br/>
-then you can calculate fuel endurance accordingly.
-If you want a different value than 140 (on line 71) to give yourself extra endurance, divide the number of hours that you want by the number of hours of fuel that you have, according to the above calculations <br/>
+then you can calculate fuel endurance accordingly
+If you want a different value than 0.75 (on line 57) to give yourself extra endurance, divide the number of hours that you want by the number of hours of fuel that you have, according to the above calculations <br/>
 multiply 140 by the resulting number (eg you want 15 hours, but only have 10 hours: 15/10=1.5)<br/>
-then, you will get a new value. Replace 140 with that (in the above example, replace 140 with 210)<br/>
-if using afterburners, change both the numbers<br/>
-if not, changing only the 2nd one will work, though to prevent confusion I recommend changing both
+then, you will get a new value. Replace 0.75 with that (in the above example, replace 0.75 with 1.125)<br/>
 # Acknowlegdements
 Thanks to @tylerbmusic (ggamergguy) for his help on the script.
