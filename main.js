@@ -89,10 +89,6 @@ function runFuelSystem() {
                 console.log("Fuel depleted! Engines have been turned off.");
             }
 
-            const groundSpeed = geofs.aircraft.instance.groundSpeed;
-            const groundContact = geofs.aircraft.instance.groundContact;
-            const engineOn = geofs.aircraft.instance.engine.on;
-            refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
             console.log(`Fuel Burn Rate per Hour: ${fuelBurnRate.toFixed(6)}`);
             console.log(`Fuel Burned This Second: ${(fuelBurnRate / 3600).toFixed(6)}`);
             console.log(`Fuel Remaining: ${fuelState.fuel.toFixed(2)}`)
@@ -113,6 +109,13 @@ function runFuelSystem() {
             runFuelSystem();
         }
     }, 1000);
+     setInterval(() => {
+    	const groundSpeed = geofs.aircraft.instance.groundSpeed;
+        const groundContact = geofs.aircraft.instance.groundContact;
+        const engineOn = geofs.aircraft.instance.engine.on;
+        refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
+    }, 100);
+
 }
 
 runFuelSystem();
