@@ -5,7 +5,7 @@
 //Accounts for afterburner use
 //Shuts off engines when fuel depleted
 //Must be on the ground, groundspeed 0, and engines off to refuel
-//Fine-tune endurance and burnrates on lines 57 and 71 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
+//Fine-tune endurance and burnrates on lines 57 and 71 - the higher the values, the longer the endurance (for line 82, change both of the 150's)
 
 function runFuelSystem() {
     function createFuelBar() {
@@ -68,7 +68,7 @@ function runFuelSystem() {
             const totalAfterBurnerThrust = hasAfterburners ? geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.afterBurnerThrust || 0), 0) : 0;
             const currentThrust = usingAfterburners ? totalAfterBurnerThrust : Math.abs(geofs.animation.values.smoothThrottle) * maxThrust;
             const throttle = currentThrust / maxThrust;
-            const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 140 : maxThrust / 140;
+            const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 150 : maxThrust / 150;
             const fullThrottleBurnRate = idleBurnRate * 3;
             const fuelBurnRate = geofs.aircraft.instance.engine.on? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
             const timeElapsed = 1 / 3600;
@@ -77,7 +77,7 @@ function runFuelSystem() {
 
             const fuelPercentage = (fuelState.fuel / fuelState.initialFuel) * 100;
             fuelBar.style.width = `${fuelPercentage}%`;
-            fuelBar.style.backgroundColor = fuelPercentage > 15 ? "green" : fuelPercentage > 7 ? "orange" : "red";
+            fuelBar.style.backgroundColor = fuelPercentage > 20 ? "green" : fuelPercentage > 10 ? "orange" : "red";
 
             if (fuelState.fuel === 0) {
                 setInterval(() => {
