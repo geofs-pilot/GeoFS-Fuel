@@ -62,6 +62,7 @@ function runFuelSystem() {
     function updateFuelSystem(fuelState, fuelBar, refuelButton) {
         fuelUpdateInterval = setInterval(() => {
             if (geofs.pause) return;
+            if (window.flight.recorder.playing) return;
             const maxThrust = geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.thrust || 0), 0);
             const hasAfterburners = geofs.aircraft.instance.engines[0]?.afterBurnerThrust !== undefined;
             const usingAfterburners = hasAfterburners && Math.abs(geofs.animation.values.smoothThrottle) > 0.9;
@@ -113,7 +114,13 @@ function runFuelSystem() {
     	const groundSpeed = geofs.aircraft.instance.groundSpeed;
         const groundContact = geofs.aircraft.instance.groundContact;
         const engineOn = geofs.aircraft.instance.engine.on;
-        refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
+        if (flight.recorder.playing) {
+            refuelButton.style.display = "none"
+            fuelBarContainer.style.display = "none"
+        } else {
+            refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
+            fuelBarContainer.style.display = "block"
+        }
     }, 100);
 
 }
