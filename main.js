@@ -105,7 +105,6 @@ function runFuelSystem() {
             window.geofs.aircraft.instance.stopEngine();
         }
     }, 10);
-    console.log("Fuel depleted! Engines have been turned off.");
 
     const fuelState = initializeFuelSystem();
     const { fuelBar, fuelBarContainer } = createFuelBar();
