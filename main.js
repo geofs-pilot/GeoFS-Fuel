@@ -63,6 +63,7 @@ function runFuelSystem() {
         fuelUpdateInterval = setInterval(() => {
             if (window.geofs.pause) return;
             if (window.flight.recorder.playing) return;
+	    if (document.hidden) return;
             const maxThrust = window.geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.thrust || 0), 0);
             const hasAfterburners = window.geofs.aircraft.instance.engines[0]?.afterBurnerThrust !== undefined;
             const usingAfterburners = hasAfterburners && Math.abs(window.geofs.animation.values.smoothThrottle) > 0.9;
