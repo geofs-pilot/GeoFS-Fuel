@@ -1,7 +1,7 @@
 # GeoFS-Fuel
 This is an experimental addon for GeoFS that attempts to simulate fuel consumption. It calculates fuel capacity based on aircraft mass and calculates burn rates based on engine RPM. 
 # Notes
-Thanks to @RadioactivePotato's [info display](https://github.com/RadioactivePotato/GeoFS-Information-Display) for the percentage display code.
+Thanks to @RadioactivePotato's [info display](https://github.com/RadioactivePotato/GeoFS-Information-Display) for the percentage display code. <br/>
 @gui350Caden on Discord requests a way to calculate fuel endurance and give himself extra fuel: <br/>
 find geofs.aircraft.instance.engines.thrust (or afterburnerThrust if you plan on crusing with afterburner) <br/>
 then divide by 140<br/>
