@@ -1,12 +1,3 @@
-//GeoFS Fuel: Attempts to simulate fuel consumption somewhat realistically
-//Calculates fuel capacity based on aircraft mass
-//Calculates burn rates based on RPM
-//Recalculates when switching aircraft
-//Accounts for afterburner use
-//Shuts off engines when fuel depleted
-//Must be on the ground, groundspeed 0, and engines off to refuel
-//Fine-tune endurance and burnrates on lines 57 and 71 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
-
 function runFuelSystem() {
     function createFuelBar() {
         const fuelBarContainer = document.createElement("div");
@@ -51,10 +42,68 @@ function runFuelSystem() {
         });
         return refuelButton;
     }
+	(function() {
+    'use strict';
+
+    // Update display
+    function updateFlightDataDisplay() {
+       
+
+            var fuelPercentage = globalThis.fuelPercentage !== undefined? globalThis.fuelPercentage.toFixed(0) + '%'  : 'N/A' ;
+            // Display css
+let geofsUI = document.querySelector(".geofs-ui-bottom");
+        if (geofsUI) {
+            var flightDataElement = document.getElementById('flightDataDisplay');
+            if (!flightDataElement) {
+                flightDataElement = document.createElement('div');
+                flightDataElement.id = 'flightDataDisplay';
+                flightDataElement.style.height = '36px';
+                flightDataElement.style.minWidth = '64px';
+                flightDataElement.style.padding = '0 16px';
+                flightDataElement.style.display = 'inline-block';
+                flightDataElement.style.fontFamily = '"Roboto", "Helvetica", "Arial", sans-serif';
+                flightDataElement.style.fontSize = '14px';
+                flightDataElement.style.fontWeight = '500';
+                flightDataElement.style.textTransform = 'uppercase';
+                flightDataElement.style.overflow = 'hidden';
+                flightDataElement.style.willChange = 'box-shadow';
+                flightDataElement.style.transition = 'box-shadow .2s cubic-bezier(.4,0,1,1), background-color .2s cubic-bezier(.4,0,.2,1), color .2s cubic-bezier(.4,0,.2,1)';
+                flightDataElement.style.textAlign = 'center';
+                flightDataElement.style.lineHeight = '36px';
+                flightDataElement.style.verticalAlign = 'middle';
+                flightDataElement.style.pointerEvents = 'none'; // Make the display clickable through
+                document.body.appendChild(flightDataElement);
+            }
+}
+                geofsUI.appendChild(flightDataElement),
+
+
+
+            flightDataElement.innerHTML = `
+                <span style="background: 0 0; border: none; border-radius: 2px; color: #000; display: inline-block; padding: 0 8px;">FUEL ${fuelPercentage}</span>
+            `;
+            if (flight.recorder.playing) {
+                flightDataElement.style.display = "none";
+            } else {
+                flightDataElement.style.display = "inline-block";
+            }
+        
+    }
+    // Update flight data display every 100ms
+    setInterval(updateFlightDataDisplay, 100);
+
+})();
 
     function initializeFuelSystem() {
         let mass = window.geofs.aircraft.instance.definition.mass;
-        globalThis.initialFuel = mass * 0.75;
+        let massMultiplier;
+        if (mass <15000) {
+            massMultiplier = 0.25;
+        } else {
+            massMultiplier = 0.75;
+        }
+
+        globalThis.initialFuel = mass * massMultiplier;
         return { fuel: initialFuel, initialFuel };
     }
 
@@ -86,7 +135,7 @@ function runFuelSystem() {
             fuelState.fuel -= fuelBurnRate * timeElapsed;
             if (fuelState.fuel < 0) fuelState.fuel = 0;
 
-            const fuelPercentage = (fuelState.fuel / fuelState.initialFuel) * 100;
+            globalThis.fuelPercentage = (fuelState.fuel / fuelState.initialFuel) * 100;
             fuelBar.style.width = `${fuelPercentage}%`;
             fuelBar.style.backgroundColor = fuelPercentage > 20 ? "green" : fuelPercentage > 10 ? "orange" : "red";
 
