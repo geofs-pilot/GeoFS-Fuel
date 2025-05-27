@@ -1,6 +1,7 @@
 # GeoFS-Fuel
-This is an experimental addon for GeoFS that attempts to simulate fuel consumption. It calculates fuel capacity based on aircraft mass and calculates burn rates based on engine RPM. It also accounts for afterburners on aircraft that have them and increases the burn rate accordingly. If you switch aircraft, it will recalculate the fuel quantity and burn rates for the new aircraft. When you run out of fuel, the engines will turn off and you won't be able to start them again until you refuel. To refuel, you must be on the ground, groundspeed 0, and engines off. You can fine-tune the fuel capacities and burn rate on lines 57 and 71 (the larger the values, the longer the endurance)(For line 71 you have to change both of the 150's). Happy Flying!
+This is an experimental addon for GeoFS that attempts to simulate fuel consumption. It calculates fuel capacity based on aircraft mass and calculates burn rates based on engine RPM. 
 # Notes
+Thanks to @RadioactivePotato's [info display](https://github.com/RadioactivePotato/GeoFS-Information-Display) for the percentage display code.
 @gui350Caden on Discord requests a way to calculate fuel endurance and give himself extra fuel: <br/>
 find geofs.aircraft.instance.engines.thrust (or afterburnerThrust if you plan on crusing with afterburner) <br/>
 then divide by 140<br/>
