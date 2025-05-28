@@ -49,7 +49,13 @@ function runFuelSystem() {
     function updateFlightDataDisplay() {
        
 
-            var fuelPercentage = globalThis.fuelPercentage !== undefined? globalThis.fuelPercentage.toFixed(0) + '%'  : 'N/A' ;
+            var fuelValue = globalThis.fuelPercentage;
+var fuelPercentage = (fuelValue !== undefined)
+    ? (fuelValue === 0
+        ? '0%'
+        : (fuelValue < 1 ? '1%' : fuelValue.toFixed(0) + '%'))
+    : 'N/A';
+
             // Display css
 let geofsUI = document.querySelector(".geofs-ui-bottom");
         if (geofsUI) {
